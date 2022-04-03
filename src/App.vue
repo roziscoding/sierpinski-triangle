@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from '@vue/reactivity'
-import { nextTick, onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { getRandomElement, getTwoRandomElements } from './lib/array'
 import { sleep } from './lib/async'
 import { getMiddle, getRandomPointBetween, point } from './lib/point'
@@ -51,7 +51,6 @@ async function randomize() {
   cx.value = Math.random() * 500
   cy.value = Math.random() * 500
   init()
-  nextTick(start)
 }
 
 async function start() {
@@ -212,6 +211,10 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
+p {
+  text-align: center;
+}
+
 .github-fork-ribbon:before {
   background-color: #333;
 }
@@ -248,6 +251,7 @@ onMounted(() => {
 
   &-group {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     margin-bottom: 10px;
