@@ -104,21 +104,6 @@ function init() {
 
   lastPoint.x = firstPoint.x
   lastPoint.y = firstPoint.y
-
-  watch([running, ax, ay, bx, by, cx, cy], async () => {
-    while (pointsCount.value < maxPoints.value && running.value) {
-      if (delay.value) await sleep(delay.value)
-      if (!running.value) break
-      const vertex = getRandomElement([A, B, C])
-      const nextPoint = getMiddle(vertex, lastPoint)
-      ctx.fillRect(nextPoint.x, nextPoint.y, pointSize.value, pointSize.value)
-      lastPoint.x = nextPoint.x
-      lastPoint.y = nextPoint.y
-      pointsCount.value++
-    }
-
-    running.value = false
-  })
 }
 
 onMounted(() => {
