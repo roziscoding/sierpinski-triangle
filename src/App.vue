@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from '@vue/reactivity'
 import { onMounted, ref, watch } from 'vue'
+import { useOnResize } from 'vue-composable'
 import { getRandomElement, getTwoRandomElements } from './lib/array'
 import { sleep } from './lib/async'
 import { getMiddle, getRandomPointBetween, point } from './lib/point'
@@ -12,6 +13,8 @@ const pointSize = ref(1)
 const [ax, ay] = [ref(240), ref(150)]
 const [bx, by] = [ref(50), ref(400)]
 const [cx, cy] = [ref(450), ref(400)]
+const { width } = useOnResize(document.body)
+const canvasWidth = computed(() => width.value - width.value * 0.1)
 
 /* Controls */
 const running = ref(false)
@@ -34,21 +37,21 @@ const lastPoint = {
 }
 
 function defaults() {
-  ax.value = 240
+  ax.value = canvasWidth.value / 2
   ay.value = 150
   bx.value = 50
   by.value = 400
-  cx.value = 450
+  cx.value = canvasWidth.value - 50
   cy.value = 400
   init()
 }
 
 async function randomize() {
-  ax.value = Math.random() * 500
+  ax.value = Math.random() * canvasWidth.value
   ay.value = Math.random() * 500
-  bx.value = Math.random() * 500
+  bx.value = Math.random() * canvasWidth.value
   by.value = Math.random() * 500
-  cx.value = Math.random() * 500
+  cx.value = Math.random() * canvasWidth.value
   cy.value = Math.random() * 500
   init()
 }
@@ -107,8 +110,14 @@ function init() {
 }
 
 onMounted(() => {
-  init()
+  canvas.value!.width = canvasWidth.value
+  defaults()
+
   watch([ax, ay, bx, by, cx, cy, delay, maxPoints, pointSize], init)
+  watch(width, () => {
+    canvas.value!.width = canvasWidth.value
+    defaults()
+  })
 })
 </script>
 
